@@ -1,0 +1,23 @@
+{
+  "name": "pragmatic-skills",
+  "version": "0.1.0",
+  "description": "Agent skills that keep the engineer in the loop, starting with Socratic design decisions.",
+  "author": {
+    "name": "Marcin Jasiński",
+    "url": "https://github.com/marcin-jasinski"
+  },
+  "repository": "https://github.com/marcin-jasinski/pragmatic-skills",
+  "license": "MIT",
+  "keywords": [
+    "engineering",
+    "skills",
+    "architecture",
+    "decision-making",
+    "socratic",
+    "adr",
+    "design-review"
+  ],
+  "skills": [
+    "./skills/socratic-design"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "marcin-jasinski",
+  "owner": {
+    "name": "Marcin Jasiński",
+    "url": "https://github.com/marcin-jasinski"
+  },
+  "description": "Pragmatic agent skills, as an installable Claude Code plugin.",
+  "plugins": [
+    {
+      "name": "pragmatic-skills",
+      "source": "./",
+      "description": "Agent skills that keep the engineer in the loop, starting with Socratic design decisions.",
+      "category": "engineering",
+      "keywords": [
+        "engineering",
+        "skills",
+        "architecture",
+        "decision-making",
+        "socratic",
+        "adr"
+      ]
+    }
+  ]
+}

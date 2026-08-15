@@ -28,7 +28,7 @@ Update later with `npx skills update`.
 
 | Skill | What it does |
 |---|---|
-| [`socratic-design`](skills/socratic-design) | Questions you through an architecture or design decision instead of handing you options. One open-ended question at a time, critiques your answer, steers you off bad practice without solving it for you, and falls back to laying out options only after 5 rounds on the same gap. Writes an ADR when the decision closes. |
+| [`socratic-design`](skills/socratic-design) | Questions you through an architecture or design decision instead of handing you options. One open-ended question at a time, critiques your answer, steers you off bad practice without solving it for you, and falls back to laying out options only after 5 rounds on the same gap. Records the closed decision wherever your repo already keeps them — matching the house format — and asks rather than scaffolding a tree if it can't find one. |
 
 ## Repo layout
 
@@ -39,6 +39,12 @@ skills/<name>/SKILL.md      # the skill; support files live alongside it
 
 `SKILL.md` is the portable format — Claude Code and Codex read it natively, and
 `npx skills` translates it for the agents that use a different shape.
+
+## Working on these skills
+
+This repo is the source of truth. Edit here, then reinstall to pick the change
+up — editing the installed copy under `~/.claude/skills/` instead just makes the
+two drift.
 
 ## Adding a skill
 

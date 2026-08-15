@@ -79,13 +79,33 @@ sub-question.
 
 ## Closing a decision
 
-Every closed decision gets written to `docs/adr/` — always, no asking. Match the
-existing files' numbering and format; read one first. If `docs/adr/` doesn't
-exist, create it.
+Every closed decision gets recorded. **Where** is the repo's business, not
+yours — find the existing convention, don't impose one.
 
-Write it in my words where possible, and cover: what was decided and why (the
-arguments that carried it), the alternatives and the reason each lost, and what
-this makes harder later.
+**Look before you write**, in this order, and stop at the first hit:
+
+1. A pointer that names the location outright — `.adr-dir`, or a path named in
+   `CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md` / the docs index.
+2. An existing directory of decision records, whatever it's called —
+   `docs/adr/`, `docs/decisions/`, `doc/adr/`, `adr/`, `.agents/adr/`,
+   `docs/architecture/decisions/`, `rfcs/`.
+3. A single append-style log — `DECISIONS.md`, `docs/decisions.md`. Append to
+   it in its existing rhythm rather than starting a directory alongside it.
+
+Found one? **Read a neighbouring record first and copy what it does** — numbering
+scheme, filename pattern, heading structure, frontmatter or none, section names,
+whether it carries status/date fields, and how long entries tend to run. The new
+record should be indistinguishable in shape from the ones already there.
+
+Found nothing? **Don't scaffold a tree on my behalf.** Say so, show me the record
+inline, and ask where it should live — including "nowhere, this was a
+conversation" as a real answer. Whatever I say, use it for the rest of the
+session without asking again. Same when there's no repo at all: print it.
+
+Content stays the same wherever it lands, in my words where possible: what was
+decided and why (the arguments that carried it), the alternatives and the reason
+each lost, and what this makes harder later. Fit it to the house format — if the
+existing records are four terse bullets, don't file an essay.
 
 Round-trip the record past me before it's final — I decided it, so I get to
 check it says what I meant.

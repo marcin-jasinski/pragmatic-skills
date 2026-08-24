@@ -9,7 +9,7 @@
     {
       "name": "pragmatic-skills",
       "source": "./",
-      "description": "Agent skills that keep the engineer in the loop, starting with Socratic design decisions.",
+      "description": "Agent skills that keep the engineer in the loop — Socratic design decisions, and defending the architecture you already shipped.",
       "category": "engineering",
       "keywords": [
         "engineering",

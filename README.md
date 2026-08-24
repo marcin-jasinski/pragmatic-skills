@@ -29,6 +29,7 @@ Update later with `npx skills update`.
 | Skill | What it does |
 |---|---|
 | [`socratic-design`](skills/socratic-design) | Questions you through an architecture or design decision instead of handing you options. One open-ended question at a time, critiques your answer, steers you off bad practice without solving it for you, and falls back to laying out options only after 5 rounds on the same gap. Records the closed decision wherever your repo already keeps them — matching the house format — and asks rather than scaffolding a tree if it can't find one. |
+| [`defend-architecture`](skills/defend-architecture) | Reads the architecture you actually shipped, then interviews you on why. One question at a time, no recommended answer supplied, one pushback per topic, and it checks your answers against the files. Rejects "it's best practice" and "for scalability"; accepts "I don't know" without snark. Ends with a verdict per decision — Solid, Unproven, Gap, or Contradicted — plus what to record as an ADR and what to delete. |
 
 ## Repo layout
 

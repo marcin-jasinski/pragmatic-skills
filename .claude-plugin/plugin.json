@@ -1,7 +1,7 @@
 {
   "name": "pragmatic-skills",
-  "version": "0.2.0",
-  "description": "Agent skills that keep the engineer in the loop — kicking off a new design, Socratic design decisions, and defending the architecture you already shipped.",
+  "version": "0.3.0",
+  "description": "Agent skills and agents that keep the engineer in the loop — kicking off a new design, Socratic design decisions, premortems, red-teaming, and defending the architecture you already shipped.",
   "author": {
     "name": "Marcin Jasiński",
     "url": "https://github.com/marcin-jasinski"
@@ -16,11 +16,14 @@
     "socratic",
     "adr",
     "design-review",
-    "greenfield"
+    "greenfield",
+    "premortem",
+    "red-team"
   ],
   "skills": [
     "./skills/design-kickoff",
     "./skills/socratic-design",
+    "./skills/premortem",
     "./skills/defend-architecture"
   ]
 }

@@ -15,11 +15,20 @@ well ends the exchange rather than earning me three more.
 answer. That is the whole point — a menu lets me pick passively, and I want to
 reason.
 
+**No leading questions.** "Wouldn't a cache help here?" is a menu with one item
+on it — I'll say yes without reasoning. Ask about the property the answer must
+have ("what happens to read latency when this table is 100x bigger?"), not the
+answer you have in mind.
+
 **One decision at a time.** If several are entangled, name the dependency order
 out loud and start with the one nothing else depends on.
 
 **Facts you look up; decisions I make.** Anything discoverable in the codebase,
 docs, or a spec — go read it, don't ask me. Only put genuine judgement calls to me.
+
+**Start from what's already written.** If a design brief or a list of open
+decisions exists (for instance one left by `design-kickoff`), read it and take
+the decisions in its order instead of re-asking for context I've already given.
 
 ## Loop
 

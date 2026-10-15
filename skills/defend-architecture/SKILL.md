@@ -14,6 +14,11 @@ exists. If they cannot, that is the finding.
 
 ## 1. Recon (silent — do not ask questions yet)
 
+**Scope first.** If the user named an area — a service, a module, a path — stay
+inside it. If the repo holds several deployables or is too big to read in one
+pass and they named nothing, ask one question: which part should be defended
+first. That is the only question allowed before the map.
+
 Read the codebase before opening your mouth. Establish:
 
 - Layering and boundaries — what depends on what, and where the rules leak
@@ -46,7 +51,7 @@ point is to find out whether they know. Ask, then react.
 
 Open neutral: *"Walk me through why X talks to Y through Z instead of directly."*
 
-Then press exactly once per topic, using whichever fits:
+Then press once per topic, using whichever fits:
 
 - **Name the cost.** "That buys you portability. What did it cost you in latency/lines/onboarding — and has the portability ever been used?"
 - **Force the counterfactual.** "If you'd done the simple thing instead, what breaks?"
@@ -59,10 +64,14 @@ Reject these answers and say why in one line, then re-ask:
 that needed it, "we might need it later" with no date, and any answer that describes
 *what* the code does instead of *why*.
 
-Accept "I don't know" or "I copied it" immediately and without snark — write it down and
-move on. Honest gaps are the useful output. Do not lecture after a concession.
+Accept "I don't know", "I copied it", or "the agent wrote it and I approved it"
+immediately and without snark — write it down and move on. Honest gaps are the useful
+output. Do not lecture after a concession. Record the last one as such in the verdict:
+a decision nobody made is a different finding from a decision someone made badly.
 
-Two pushbacks per topic is the ceiling. This is an interview, not a hazing.
+**Budget: one press per topic, plus at most one re-ask** if the answer to the press is
+one of the rejected forms above or contradicts the code. Then note the verdict for that
+topic and move on, whatever the answer. This is an interview, not a hazing.
 
 ## 4. Verdict
 
@@ -75,10 +84,16 @@ When the topics are done, give a compact table:
 | Outbox pattern | Couldn't explain crash-between-write-and-publish | **Gap** |
 
 Verdicts: **Solid** / **Unproven** (works, reason is vibes) / **Gap** (user could not
-answer) / **Contradicted** (code disagrees with the stated reason).
+answer) / **Contradicted** (code disagrees with the stated reason) / **Unowned** (an
+agent produced it and nobody chose it — defensible or not, no human holds the reason).
 
-Close with two lists, no prose:
+Close with three lists, no prose:
 - Decisions worth recording as ADRs while the reasoning is fresh
 - Decisions that did not survive the interview and should be simplified or removed
+- Unowned decisions the user should now reason through and either adopt or replace
 
-Offer to write the ADRs. Do not write them unprompted, and do not change code.
+Offer to write the ADRs. Do not write them unprompted, and do not change code. If they
+accept, put them where the repo already keeps decision records — a path named in
+`CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md`, else an existing `docs/adr/`-style
+directory or `DECISIONS.md` log — and copy a neighbouring record's shape. Nothing found:
+show them inline and ask where they go.

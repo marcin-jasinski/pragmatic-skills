@@ -28,10 +28,10 @@ Update later with `npx skills update`.
 
 | Skill | What it does |
 |---|---|
-| [`design-kickoff`](skills/design-kickoff) | Starts a new system from a rough brief without handing you an architecture. Interviews you on the problem, users, constraints and scale; makes you rank quality attributes (and name one you'll be bad at) and turn adjectives into measurable scenarios; has you model the domain and sketch the first architecture *before* it shows any, then critiques your sketch against the drivers. Ends with a design brief and an ordered backlog of open decisions, ready to take one at a time with `socratic-design`. |
-| [`socratic-design`](skills/socratic-design) | Questions you through an architecture or design decision instead of handing you options. One open-ended question at a time, critiques your answer, steers you off bad practice without solving it for you, and falls back to laying out options only after 5 rounds on the same gap. Records the closed decision wherever your repo already keeps them — matching the house format — and asks rather than scaffolding a tree if it can't find one. |
-| [`premortem`](skills/premortem) | "It's a year from now and this failed — why?" You write the failure stories first; when you stall it changes the angle rather than feeding you risks, then pushes each story into a concrete trigger → chain → consequence. Only then does it add the failures you missed, labelled as agent-raised (via `red-team-architect` when available). You rate, you pick the top three, you propose prevent / detect / contain / accept — every non-prevention gets a real tripwire. The record ends with your **blind spots**: the agent-raised risks you rated as serious. |
-| [`defend-architecture`](skills/defend-architecture) | Reads the architecture you actually shipped, then interviews you on why. One question at a time, no recommended answer supplied, one pushback per topic (plus one re-ask if dodged), and it checks your answers against the files. Rejects "it's best practice" and "for scalability"; accepts "I don't know" without snark, and "the agent wrote it" as an honest answer it marks Unowned. Ends with a verdict per decision — Solid, Unproven, Gap, Contradicted, or Unowned — plus what to record as an ADR, what to delete, and what to take ownership of. |
+| [`design-kickoff`](skills/design-kickoff) | Starts a new system from a rough brief without handing you an architecture. Interviews you on the problem, users, constraints and scale; makes you rank quality attributes (and name one you'll be bad at) and turn adjectives into measurable scenarios; has you model the domain and sketch the first architecture *before* it shows any, then critiques your sketch against the drivers. Saves the brief at every phase boundary so a kickoff can span sessions. Ends with a design brief and an ordered backlog of open decisions, ready to take one at a time with `socratic-design`, and offers a `premortem` before you commit. |
+| [`socratic-design`](skills/socratic-design) | Questions you through an architecture or design decision instead of handing you options. One open-ended question at a time, critiques your answer, steers you off bad practice without solving it for you, and falls back to laying out options only after 5 rounds on the same gap. Concedes when you name something it missed, holds (and records the disagreement) when you don't. Records each decision as it closes, wherever your repo already keeps them — matching the house format, superseding the old record rather than contradicting it — and asks rather than scaffolding a tree if it can't find one. |
+| [`premortem`](skills/premortem) | "It's a year from now and this failed — why?" You write the failure stories first; when you stall it changes the angle rather than feeding you risks, then pushes each story into a concrete trigger → chain → consequence. Only then does it add the failures you missed, labelled as agent-raised (via `red-team-architect` when available). You rate, you pick the top three, you propose prevent / detect / contain / accept — every non-prevention gets a real tripwire. The record ends with your **blind spots**: the agent-raised risks you rated as serious — and an offer to turn each tripwire into a tracked issue or alert so it actually fires. |
+| [`defend-architecture`](skills/defend-architecture) | Reads the architecture you actually shipped, then interviews you on why. One question at a time, no recommended answer supplied, one pushback per topic (plus one re-ask if dodged), and it checks your answers against the files. Rejects "it's best practice" and "for scalability"; accepts "I don't know" without snark, and "the agent wrote it" as an honest answer it marks Unowned. Ends with a verdict per decision — Solid, Unproven, Gap, Contradicted, or Unowned — plus what to record as an ADR, what to delete, and what to take ownership of — and offers to reason the Gap and Unowned ones through with `socratic-design`. |
 
 ## The agents
 
@@ -49,6 +49,7 @@ skills that use it fall back to doing the work themselves when it's missing.
 ```
 skills/<name>/SKILL.md      # the skill; support files live alongside it
 agents/<name>.md            # subagents (Claude Code plugin only)
+scripts/                    # repo tooling (shared-block check)
 .claude-plugin/             # plugin.json + marketplace.json for the Claude Code path
 ```
 
@@ -60,6 +61,24 @@ agents/<name>.md            # subagents (Claude Code plugin only)
 This repo is the source of truth. Edit here, then reinstall to pick the change
 up — editing the installed copy under `~/.claude/skills/` instead just makes the
 two drift.
+
+### Shared blocks
+
+Skills install one at a time, so they can't share a file at runtime. Rules
+that must behave the same in every skill — how to handle pushback, where
+records go and how they supersede old ones — are copied into each `SKILL.md`
+between `<!-- shared:NAME -->` and `<!-- /shared:NAME -->` markers.
+
+The canonical copy lives in `skills/socratic-design/SKILL.md`. Edit it there,
+then sync and check:
+
+```
+python3 scripts/check-shared-blocks.py --write   # copy canonical blocks into every skill
+python3 scripts/check-shared-blocks.py           # fail if any copy has drifted (CI runs this)
+```
+
+Every skill marks what the user handed off with the same words — *decided by
+agent* — so a later skill can find what nobody has yet made their own.
 
 ## Adding a skill
 

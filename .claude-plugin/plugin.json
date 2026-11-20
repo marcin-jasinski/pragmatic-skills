@@ -1,6 +1,6 @@
 {
   "name": "pragmatic-skills",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Agent skills and agents that keep the engineer in the loop — kicking off a new design, Socratic design decisions, premortems, red-teaming, and defending the architecture you already shipped.",
   "author": {
     "name": "Marcin Jasiński",

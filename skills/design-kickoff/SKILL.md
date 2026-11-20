@@ -1,6 +1,6 @@
 ---
 name: design-kickoff
-description: Guides the very start of designing a new system from a rough brief. Interviews the user one question at a time about the problem, users, constraints, ranked quality attributes and scale; makes them model the domain and sketch the first architecture themselves before showing any; then critiques the sketch against what was established and closes with a design brief and an ordered backlog of open decisions. Use when the user has an idea for a new application, service or system and wants to design it rather than be handed an architecture — triggers include "/design-kickoff", "I want to build X", "help me design a system that…", "where do I start with…", "greenfield", "new project architecture", "I have an idea for an app".
+description: Guides the very start of designing a new system from a rough brief. Interviews the user one question at a time about the problem, users, constraints, ranked quality attributes and scale; makes them model the domain and sketch the first architecture themselves before showing any; then critiques the sketch against what was established and closes with a design brief and an ordered backlog of open decisions. Use when the user has an idea for a new application, service or system and wants to work out its architecture rather than be handed one — triggers include "/design-kickoff", "help me design a system that…", "I want to design a new service for…", "where do I start with the architecture of…", "greenfield architecture", "new project architecture". Not for requests to write code now, or for small scripts and single features where there is no architecture to decide.
 ---
 
 # Design Kickoff
@@ -12,6 +12,10 @@ do not hand me an architecture.
 The failure this skill exists to prevent: I type two sentences, you return a
 diagram with twelve boxes and a message broker in the middle, I click approve,
 and six months later nobody can say why any of it is there.
+
+If what I actually want is code now, or the thing is too small to have an
+architecture worth designing, say in one line what this skill does and offer to
+skip it. Don't run a workshop on someone who asked for a script.
 
 ## Rules
 
@@ -48,7 +52,9 @@ you had to make to do it. Ask me to **correct** them, not confirm them —
 Then set the depth. A weekend tool and a product with a team and a compliance
 officer need different kickoffs. If the brief doesn't make it obvious, ask one
 question to find out. For something small, run Phases 1, 2 (top two attributes,
-no scenarios), and 4, and say that you're skipping the rest and why.
+no scenarios), and 4, then only the open-decisions list from Phase 5 (no risk
+pass), and say what you're skipping and why. Small designs still leave
+decisions open; the brief still needs to name them.
 
 ## Phase 1 — Problem and people
 
@@ -145,10 +151,14 @@ build vs. buy, tenancy model, hosting. List them, and for each:
 
 Order by dependency, then by irreversibility.
 
-Risks: ask me first — "what's most likely to make this fail?" — then add the
-ones I missed, labelled as yours. Close with the **first thing to build to
-retire the biggest risk**: a spike, a walking skeleton, a load test, a call to
-the integration partner.
+Risks: this is a first pass, not a premortem. Ask me first — "what's most
+likely to make this fail?" — then add the ones I missed, labelled as yours.
+Close with the **first thing to build to retire the biggest risk**: a spike, a
+walking skeleton, a load test, a call to the integration partner.
+
+If the `premortem` skill is available, offer it before I commit to the sketch
+and say it's the deeper version of this pass. Otherwise, say in the brief that
+risks got a first pass only.
 
 ## When I'm stuck, or opting out
 
@@ -166,22 +176,39 @@ the integration partner.
 The *decided by agent* marks matter: they're the parts of the design I haven't
 yet made my own.
 
+<!-- shared:pushback — copied from skills/socratic-design; edit there, then run scripts/check-shared-blocks.py --write -->
+## When the user pushes back
+
+The user will argue with your critiques — that's the method working. Don't fold
+to keep the peace, and don't dig in to win.
+
+- **Concede** when the counter-argument names a fact, constraint or cost you
+  hadn't accounted for. Say in one line what changed your mind.
+- **Hold** when it doesn't — repetition, confidence, "I just prefer it". Restate
+  the concrete failure once, then record the disagreement in the user's words
+  and move on. The user owns the call; the record shows it was made over an
+  objection.
+- **Separate wrong from different.** Critique only what you can tie to a
+  concrete failure, a broken constraint, or a cost the user hasn't priced. If
+  an answer is sound but isn't what you'd have picked, say it's sound and stop
+  there. Questioning toward an answer you're holding back is a leading question
+  spread over several turns.
+<!-- /shared:pushback -->
+
 ## Pacing
 
-A real kickoff doesn't fit in one sitting. When I stop, write out the running
-brief so the next session can pick it up. When starting and a brief from an
-earlier kickoff exists, read it and resume at the first incomplete phase
-instead of starting over.
+A real kickoff doesn't fit in one sitting, and you won't know when I've left —
+people close the tab. So **save the running brief at every phase boundary**,
+when you show it to me: write it to where the brief will live (below), marked
+as a draft with the last completed phase. If its location is still open, ask
+the first time you save, not at the end.
+
+When starting and a brief from an earlier kickoff exists, read it and resume at
+the first incomplete phase instead of starting over.
 
 ## Output — the design brief
 
-Write it down at the end. **Where** is the repo's business: look for a pointer
-in `CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md` / a docs index, then an
-existing `docs/`, `design/` or `docs/architecture/` directory, and match a
-neighbouring document's shape. Nothing found, or no repo at all: show it
-inline and ask where it should live. Don't scaffold a tree.
-
-Sections, in my words where possible:
+The brief is the running notes, completed. Sections, in my words where possible:
 
 1. Problem and users — including the day-one flow
 2. Scope and explicit non-goals
@@ -195,7 +222,44 @@ Sections, in my words where possible:
 9. Risks and the first spike
 10. Decided by agent — everything I deferred, so I can come back to it
 
-Round-trip it past me before it's final.
+Phases that were skipped stay in the brief as headings with the reason, so
+nobody mistakes a gap for an answer.
+
+<!-- shared:record-location — copied from skills/socratic-design; edit there, then run scripts/check-shared-blocks.py --write -->
+### Where the record goes
+
+That's the repo's business — find the existing convention, don't impose one.
+Look in this order and stop at the first hit:
+
+1. A pointer that names the location outright — `.adr-dir`, or a path named in
+   `CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md` / the docs index.
+2. An existing directory of the same kind of document, whatever it's called —
+   for decision records `docs/adr/`, `docs/decisions/`, `doc/adr/`, `adr/`,
+   `.agents/adr/`, `docs/architecture/decisions/`, `rfcs/`; for design
+   documents `docs/design/`, `design/`, `docs/architecture/`.
+3. A single append-style log — `DECISIONS.md`, `docs/decisions.md`. Append to
+   it in its existing rhythm rather than starting a directory alongside it.
+
+Found one? **Read a neighbouring document first and copy what it does** —
+numbering scheme, filename pattern, heading structure, frontmatter or none,
+status and date fields, and how long entries tend to run. The new one should be
+indistinguishable in shape from the ones already there.
+
+**Supersede, don't duplicate.** Before writing a decision, search the existing
+records for one on the same subject. If the new decision replaces it, mark the
+old one superseded and link the two the way the house format does (a status
+field, a "Superseded by" line). If the format has no such convention, add a
+one-line note to the old record and tell the user. Never leave two accepted
+records that contradict each other.
+
+Found nothing? **Don't scaffold a tree.** Say so, show the record inline, and
+ask where it should live — "nowhere, this was a conversation" is a real answer.
+Use that answer for the rest of the session without asking again. No repo at
+all: print it.
+
+Round-trip the record past the user before it's final — they made the call, so
+they check it says what they meant.
+<!-- /shared:record-location -->
 
 Then offer to take the open decisions one at a time, starting from the top of
 the list. If the `socratic-design` skill is available, hand each one to it;

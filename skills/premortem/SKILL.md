@@ -1,6 +1,6 @@
 ---
 name: premortem
-description: Runs a premortem on a design, plan, migration, or architectural decision before it ships — "it's a year from now and this failed; why?" The user writes the failure stories first; the agent pushes each one until it's a concrete causal chain, then adds the failures the user missed, labelled as its own. Ends with ranked risks, mitigations and tripwires the user proposed, and a list of blind spots. Use when the user is about to commit to a design, start a build, run a migration or launch, or asks "what could go wrong", "premortem this", "poke holes in the plan", "how will this fail", or invokes /premortem.
+description: Runs a premortem on a design, plan, migration, or architectural decision before it ships — "it's a year from now and this failed; why?" The user writes the failure stories first; the agent pushes each one until it's a concrete causal chain, then adds the failures the user missed, labelled as its own. Ends with ranked risks, mitigations and tripwires the user proposed, and a list of blind spots. Use when the user is about to commit to a design, start a build, run a migration or launch, or asks "premortem this", "what could go wrong with this design / plan / migration", "poke holes in the plan", "how will this system fail", or invokes /premortem. Not for a single function, query or snippet — that's code review, not a premortem.
 ---
 
 # Premortem
@@ -12,6 +12,11 @@ A premortem works because "imagine it already failed — explain it" unlocks
 reasons that "do you see any risks?" never does. It stops working the moment
 you hand me a risk list: I skim it, nod, and file it. So **I write the failures
 first**, and yours come only after I've run dry.
+
+A premortem needs something with a future: a design, a plan, a migration, a
+launch. If what I've pointed at is a single function or snippet, or I want a
+quick risk list rather than the exercise, say in one line what this skill does
+and offer to just review it instead.
 
 ## Rules
 
@@ -86,10 +91,17 @@ Only now add yours, clearly labelled as **agent-raised**. Prioritise the ones
 that are specific to *this* design and its constraints over the generic ones
 every system shares; skip anything I already covered.
 
-If the `red-team-architect` agent is available, use it here: hand it the design
-and nothing of my stories or reasoning, so its attacks come from a fresh
-reading rather than mine. Merge its findings, dropping duplicates of my
-stories, and keep them labelled as agent-raised.
+If the `red-team-architect` agent is available, use it here. Hand it the
+artefacts to read **plus the scope from step 1**: the horizon and what failure
+means here, because those define the target, not my reasoning. Give it nothing
+of my stories, ratings or arguments, so its attacks come from a fresh reading
+rather than mine. Merge its findings, dropping duplicates of my stories, and
+keep them labelled as agent-raised.
+
+The red team reads artefacts, so it finds technical failures. If failure here
+includes adoption, deadline, cost or people ("nobody used it", "we missed the
+launch"), those agent-raised stories are yours to add. Don't let the red team's
+output stand in for the whole second half.
 
 Present each agent-raised story as a story, not a verdict, and ask me whether
 it's plausible **before** you say how likely you think it is. If I dismiss one,
@@ -139,13 +151,42 @@ over reads to the replica" is.
 - **"You decide" / "Just tell me"** → do it, in full, and mark it in the record
   as *decided by agent*.
 
+<!-- shared:pushback — copied from skills/socratic-design; edit there, then run scripts/check-shared-blocks.py --write -->
+## When the user pushes back
+
+The user will argue with your critiques — that's the method working. Don't fold
+to keep the peace, and don't dig in to win.
+
+- **Concede** when the counter-argument names a fact, constraint or cost you
+  hadn't accounted for. Say in one line what changed your mind.
+- **Hold** when it doesn't — repetition, confidence, "I just prefer it". Restate
+  the concrete failure once, then record the disagreement in the user's words
+  and move on. The user owns the call; the record shows it was made over an
+  objection.
+- **Separate wrong from different.** Critique only what you can tie to a
+  concrete failure, a broken constraint, or a cost the user hasn't priced. If
+  an answer is sound but isn't what you'd have picked, say it's sound and stop
+  there. Questioning toward an answer you're holding back is a leading question
+  spread over several turns.
+<!-- /shared:pushback -->
+
+Pushback on a rating follows the same rule: a rating I defend with a reason
+stands; one I defend with "it'll be fine" gets one restatement of the evidence,
+and then it stands with your objection noted next to it.
+
+## Saving as you go
+
+A premortem runs long, and you won't know when I've left. Write the record as a
+draft after each of steps 2, 4 and 5, with the last completed step marked. If
+its location is still open, settle it the first time you save. When starting
+and a draft premortem for the same subject exists, read it and resume at the
+first incomplete step.
+
 ## Output — the premortem record
 
-Write it down. If the subject has a design brief or ADR, add the premortem
-next to it or into its risks section, matching its shape. Otherwise find where
-the repo keeps such documents (a pointer in `CLAUDE.md` / `AGENTS.md` /
-`CONTRIBUTING.md`, an existing `docs/` or decision-record directory). Nothing
-found, or no repo: show it inline and ask where it should live. Don't scaffold.
+If the subject has a design brief or ADR, add the premortem next to it or into
+its risks section, matching its shape. Otherwise it goes where the repo keeps
+such documents (below).
 
 Contents:
 
@@ -160,7 +201,51 @@ Contents:
    useful line in the document.
 7. Decided by agent — anything I deferred
 
-Round-trip it past me before it's final.
+<!-- shared:record-location — copied from skills/socratic-design; edit there, then run scripts/check-shared-blocks.py --write -->
+### Where the record goes
+
+That's the repo's business — find the existing convention, don't impose one.
+Look in this order and stop at the first hit:
+
+1. A pointer that names the location outright — `.adr-dir`, or a path named in
+   `CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md` / the docs index.
+2. An existing directory of the same kind of document, whatever it's called —
+   for decision records `docs/adr/`, `docs/decisions/`, `doc/adr/`, `adr/`,
+   `.agents/adr/`, `docs/architecture/decisions/`, `rfcs/`; for design
+   documents `docs/design/`, `design/`, `docs/architecture/`.
+3. A single append-style log — `DECISIONS.md`, `docs/decisions.md`. Append to
+   it in its existing rhythm rather than starting a directory alongside it.
+
+Found one? **Read a neighbouring document first and copy what it does** —
+numbering scheme, filename pattern, heading structure, frontmatter or none,
+status and date fields, and how long entries tend to run. The new one should be
+indistinguishable in shape from the ones already there.
+
+**Supersede, don't duplicate.** Before writing a decision, search the existing
+records for one on the same subject. If the new decision replaces it, mark the
+old one superseded and link the two the way the house format does (a status
+field, a "Superseded by" line). If the format has no such convention, add a
+one-line note to the old record and tell the user. Never leave two accepted
+records that contradict each other.
+
+Found nothing? **Don't scaffold a tree.** Say so, show the record inline, and
+ask where it should live — "nowhere, this was a conversation" is a real answer.
+Use that answer for the rest of the session without asking again. No repo at
+all: print it.
+
+Round-trip the record past the user before it's final — they made the call, so
+they check it says what they meant.
+<!-- /shared:record-location -->
+
+### Make the tripwires real
+
+A tripwire that lives only in this document never fires. Once I've approved the
+record, offer to turn each tripwire into a tracked item, using whatever this
+repo already uses: an issue, if there's a tracker you can reach (e.g. `gh`); a
+draft alert rule next to the existing ones, if monitoring is kept as code.
+Offer, don't do it, and file nothing I haven't seen. If neither exists, list
+the tripwires as a checklist at the top of the record so they're the first
+thing anyone reads.
 
 ## Tone
 
